@@ -23,7 +23,6 @@
     header {
       display: flex;
       align-items: center;
-      gap: 1rem;
       width: min(640px, 100%);
       justify-content: space-between;
     }
@@ -83,73 +82,84 @@
     }
     #btn-flip:active { background: rgba(124,106,247,0.4); transform: rotate(180deg); }
 
-    /* ── metric panels ── */
-    #metrics {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
+    /* ── happiness panel ── */
+    #happiness-panel {
       width: min(640px, 100%);
-    }
-
-    .metric-panel {
       background: #141414;
       border-radius: 14px;
-      padding: 1rem 1.2rem;
+      padding: 1.1rem 1.4rem;
       border: 1px solid #222;
     }
 
-    .metric-label {
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+    }
+
+    .panel-label {
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       color: #555;
-      margin-bottom: 0.5rem;
     }
 
-    .metric-value {
-      font-size: 2.4rem;
-      font-weight: 900;
-      line-height: 1;
-      color: #fff;
-      margin-bottom: 0.4rem;
+    #face-count { font-size: 0.78rem; color: #444; }
+    #face-count span { color: #a78bfa; font-weight: 700; }
+
+    #happiness-value {
+      font-size: 3rem; font-weight: 900; line-height: 1;
+      color: #fff; margin-bottom: 0.45rem;
       font-variant-numeric: tabular-nums;
     }
 
-    .metric-bar-track {
-      background: #1e1e1e;
-      border-radius: 99px;
-      height: 8px;
-      overflow: hidden;
+    #happiness-bar-track {
+      background: #1e1e1e; border-radius: 99px; height: 10px; overflow: hidden;
     }
-
-    .metric-bar-fill {
-      height: 100%;
-      border-radius: 99px;
-      transition: width 0.25s ease, background 0.4s ease;
+    #happiness-bar-fill {
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, #7c6af7, #f9a8d4);
+      box-shadow: 0 0 10px #7c6af755;
+      transition: width 0.2s ease;
       width: 0%;
     }
 
-    #happiness-bar-fill {
-      background: linear-gradient(90deg, #7c6af7, #f9a8d4);
-      box-shadow: 0 0 8px #7c6af755;
-    }
-
-    #attention-bar-fill {
-      background: linear-gradient(90deg, #f87171, #facc15, #4ade80);
-      box-shadow: 0 0 8px #4ade8055;
-    }
-
-    /* face count row */
-    #face-count-row {
-      font-size: 0.78rem;
-      color: #444;
+    /* ── chart ── */
+    #chart-panel {
       width: min(640px, 100%);
-      text-align: right;
-      padding-right: 0.2rem;
+      background: #141414;
+      border-radius: 14px;
+      padding: 1rem 1.2rem 0.8rem;
+      border: 1px solid #222;
     }
-    #face-count-row span { color: #a78bfa; font-weight: 700; }
+
+    #chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.7rem;
+    }
+
+    #chart-duration {
+      font-size: 0.72rem;
+      color: #444;
+    }
+
+    #chart-canvas {
+      width: 100%;
+      height: 120px;
+      display: block;
+      border-radius: 6px;
+    }
 
     /* ── face cards ── */
+    #face-count-row {
+      font-size: 0.75rem; color: #333;
+      width: min(640px, 100%);
+      text-align: right;
+    }
+
     #face-cards {
       display: flex;
       flex-wrap: wrap;
@@ -164,71 +174,17 @@
       padding: 0.65rem 0.9rem;
       flex: 1 1 140px;
       min-width: 120px;
-      transition: border-color 0.4s;
     }
 
     .fc-id {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 0.3rem;
-      font-weight: 700;
+      font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: 0.1em; margin-bottom: 0.3rem; font-weight: 700;
     }
+    .fc-emotion { font-size: 1rem; font-weight: 700; color: #fff; text-transform: capitalize; }
+    .fc-happy   { font-size: 0.78rem; color: #a78bfa; margin-top: 0.2rem; }
+    .fc-new     { font-size: 0.65rem; color: #4ade80; margin-top: 0.25rem; }
 
-    .fc-emotion {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #fff;
-      text-transform: capitalize;
-      margin-bottom: 0.25rem;
-    }
-
-    .fc-stats {
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-      margin-top: 0.3rem;
-    }
-
-    .fc-stat-row {
-      display: grid;
-      grid-template-columns: 1.1rem 1fr 34px;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .fc-stat-icon { font-size: 0.75rem; text-align: center; }
-
-    .fc-mini-track {
-      background: #1e1e1e;
-      border-radius: 99px;
-      height: 5px;
-      overflow: hidden;
-    }
-
-    .fc-mini-fill {
-      height: 100%;
-      border-radius: 99px;
-      transition: width 0.25s ease, background 0.4s ease;
-    }
-
-    .fc-stat-pct {
-      font-size: 0.7rem;
-      color: #666;
-      text-align: right;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .fc-new {
-      font-size: 0.65rem;
-      color: #4ade80;
-      margin-top: 0.3rem;
-    }
-
-    #no-face {
-      font-size: 0.82rem; color: #3a3a3a;
-      text-align: center; min-height: 1.2em;
-    }
+    #no-face { font-size: 0.82rem; color: #333; text-align: center; min-height: 1.2em; }
   </style>
 </head>
 <body>
@@ -251,31 +207,33 @@
 
 <p id="no-face"></p>
 
-<div id="metrics">
-  <div class="metric-panel">
-    <div class="metric-label">😊 Group Happiness</div>
-    <div class="metric-value" id="happiness-value">—</div>
-    <div class="metric-bar-track">
-      <div class="metric-bar-fill" id="happiness-bar-fill"></div>
-    </div>
+<div id="happiness-panel">
+  <div class="panel-header">
+    <span class="panel-label">😊 Group Happiness</span>
+    <span id="face-count">Faces: <span id="face-num">0</span></span>
   </div>
-  <div class="metric-panel">
-    <div class="metric-label">🎯 Group Attention</div>
-    <div class="metric-value" id="attention-value">—</div>
-    <div class="metric-bar-track">
-      <div class="metric-bar-fill" id="attention-bar-fill"></div>
-    </div>
+  <div id="happiness-value">—</div>
+  <div id="happiness-bar-track">
+    <div id="happiness-bar-fill"></div>
   </div>
 </div>
 
-<div id="face-count-row">Faces detected: <span id="face-num">0</span></div>
+<div id="chart-panel">
+  <div id="chart-header">
+    <span class="panel-label">📈 Happiness over time</span>
+    <span id="chart-duration">—</span>
+  </div>
+  <canvas id="chart-canvas"></canvas>
+</div>
 
 <div id="face-cards"></div>
 
 <script>
 // ── Config ───────────────────────────────────────────────
 const MODEL_URL       = 'https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@master/weights';
-const INTERVAL        = 200;
+const DETECT_INTERVAL = 200;   // ms
+const SAMPLE_INTERVAL = 1000;  // ms — how often to add a chart point
+const MAX_SAMPLES     = 120;   // 2 minutes of history
 const MATCH_THRESHOLD = 0.50;
 const MAX_DESCRIPTORS = 10;
 const STORAGE_KEY     = 'emo-detector-faces-v1';
@@ -284,26 +242,32 @@ const COLORS = ['#7c6af7','#f472b6','#34d399','#fb923c','#60a5fa','#f87171','#a3
 const EMOJI  = { happy:'😊', sad:'😢', angry:'😠', fearful:'😨', disgusted:'🤢', surprised:'😲', neutral:'😐' };
 
 // ── DOM ──────────────────────────────────────────────────
-const statusEl    = document.getElementById('status');
-const video       = document.getElementById('video');
-const overlay     = document.getElementById('overlay');
-const ctx         = overlay.getContext('2d');
-const btnFlip     = document.getElementById('btn-flip');
-const btnReset    = document.getElementById('btn-reset');
-const noFaceEl    = document.getElementById('no-face');
-const faceNumEl   = document.getElementById('face-num');
-const knownNumEl  = document.getElementById('known-num');
-const happyVal    = document.getElementById('happiness-value');
-const happyBar    = document.getElementById('happiness-bar-fill');
-const attentionVal = document.getElementById('attention-value');
-const attentionBar = document.getElementById('attention-bar-fill');
-const faceCards   = document.getElementById('face-cards');
+const statusEl   = document.getElementById('status');
+const video      = document.getElementById('video');
+const overlay    = document.getElementById('overlay');
+const overlayCtx = overlay.getContext('2d');
+const btnFlip    = document.getElementById('btn-flip');
+const btnReset   = document.getElementById('btn-reset');
+const noFaceEl   = document.getElementById('no-face');
+const faceNumEl  = document.getElementById('face-num');
+const knownNumEl = document.getElementById('known-num');
+const happyVal   = document.getElementById('happiness-value');
+const happyBar   = document.getElementById('happiness-bar-fill');
+const faceCards  = document.getElementById('face-cards');
+const chartCanvas= document.getElementById('chart-canvas');
+const chartCtx   = chartCanvas.getContext('2d');
+const chartDur   = document.getElementById('chart-duration');
 
 // ── State ────────────────────────────────────────────────
 let currentStream = null;
 let facingMode    = 'user';
 let knownFaces    = [];
 let nextId        = 1;
+
+// chart data: [{t: timestamp, v: 0-1}]
+let chartData     = [];
+let lastSample    = 0;
+let currentHappy  = null; // latest group happiness (0-1 or null)
 
 // ── Persistence ──────────────────────────────────────────
 function loadStorage() {
@@ -358,39 +322,103 @@ function assignId(descriptor) {
   return { id, isNew: true };
 }
 
-// ── Attention from landmarks ──────────────────────────────
-// Uses 68-point landmark geometry to estimate head orientation.
-// Horizontal: nose tip offset from jaw midpoint → yaw (looking left/right)
-// Vertical:   nose tip position in eye-to-chin span → pitch (looking up/down)
-function computeAttention(landmarks) {
-  const p = landmarks.positions;
-
-  // Jaw endpoints: 0 (left) → 16 (right)
-  const faceW = p[16].x - p[0].x;
-  if (faceW < 10) return 0.5;
-
-  // Yaw: how far nose tip deviates from face horizontal center
-  const centerX  = (p[0].x + p[16].x) / 2;
-  const yawRatio = Math.abs(p[30].x - centerX) / (faceW / 2); // 0=straight, >1=sideways
-
-  // Pitch: nose tip Y position within eye-to-chin vertical span
-  const eyeY    = (p[36].y + p[45].y) / 2; // avg of outer eye corners
-  const chinY   = p[8].y;
-  const faceH   = chinY - eyeY;
-  const noseRelY = faceH > 10 ? (p[30].y - eyeY) / faceH : 0.5;
-  // Looking straight ≈ 0.5; deviation → distracted
-  const pitchRatio = Math.abs(noseRelY - 0.5) / 0.45;
-
-  // Take the worse of the two axes, apply a sensitivity factor
-  const distraction = Math.min(1, Math.max(yawRatio, pitchRatio) * 1.3);
-  return Math.max(0, 1 - distraction);
+// ── Chart ─────────────────────────────────────────────────
+function resizeChart() {
+  const rect = chartCanvas.getBoundingClientRect();
+  chartCanvas.width  = rect.width  * devicePixelRatio;
+  chartCanvas.height = rect.height * devicePixelRatio;
+  drawChart();
 }
 
-function attentionColor(score) {
-  // 0 = red, 0.5 = yellow, 1 = green
-  if (score > 0.65) return '#4ade80';
-  if (score > 0.35) return '#facc15';
-  return '#f87171';
+function sampleHappiness() {
+  const now = Date.now();
+  if (now - lastSample < SAMPLE_INTERVAL) return;
+  lastSample = now;
+
+  chartData.push({ t: now, v: currentHappy ?? 0 });
+  if (chartData.length > MAX_SAMPLES) chartData.shift();
+  drawChart();
+}
+
+function drawChart() {
+  const w = chartCanvas.width;
+  const h = chartCanvas.height;
+  chartCtx.clearRect(0, 0, w, h);
+
+  const pad = { top: 10, right: 10, bottom: 20, left: 32 };
+  const iw  = w - pad.left - pad.right;
+  const ih  = h - pad.top  - pad.bottom;
+
+  // grid lines
+  chartCtx.strokeStyle = '#1e1e1e';
+  chartCtx.lineWidth   = 1;
+  [0, 0.25, 0.5, 0.75, 1].forEach(v => {
+    const y = pad.top + ih * (1 - v);
+    chartCtx.beginPath();
+    chartCtx.moveTo(pad.left, y);
+    chartCtx.lineTo(pad.left + iw, y);
+    chartCtx.stroke();
+    chartCtx.fillStyle = '#333';
+    chartCtx.font = `${10 * devicePixelRatio}px Segoe UI, sans-serif`;
+    chartCtx.textAlign = 'right';
+    chartCtx.fillText(Math.round(v * 100) + '%', pad.left - 4, y + 4);
+  });
+
+  if (chartData.length < 2) {
+    chartDur.textContent = '—';
+    return;
+  }
+
+  const tMin = chartData[0].t;
+  const tMax = chartData[chartData.length - 1].t;
+  const span = tMax - tMin || 1;
+
+  // duration label
+  const secs = Math.round(span / 1000);
+  chartDur.textContent = secs < 60 ? `${secs}s` : `${Math.floor(secs/60)}m ${secs%60}s`;
+
+  // filled area under the line
+  const gradient = chartCtx.createLinearGradient(0, pad.top, 0, pad.top + ih);
+  gradient.addColorStop(0,   'rgba(124,106,247,0.4)');
+  gradient.addColorStop(1,   'rgba(124,106,247,0.0)');
+
+  chartCtx.beginPath();
+  chartData.forEach((pt, i) => {
+    const x = pad.left + ((pt.t - tMin) / span) * iw;
+    const y = pad.top  + ih * (1 - pt.v);
+    i === 0 ? chartCtx.moveTo(x, y) : chartCtx.lineTo(x, y);
+  });
+  // close path for fill
+  const lastX = pad.left + iw;
+  chartCtx.lineTo(lastX, pad.top + ih);
+  chartCtx.lineTo(pad.left, pad.top + ih);
+  chartCtx.closePath();
+  chartCtx.fillStyle = gradient;
+  chartCtx.fill();
+
+  // line
+  chartCtx.beginPath();
+  chartData.forEach((pt, i) => {
+    const x = pad.left + ((pt.t - tMin) / span) * iw;
+    const y = pad.top  + ih * (1 - pt.v);
+    i === 0 ? chartCtx.moveTo(x, y) : chartCtx.lineTo(x, y);
+  });
+  chartCtx.strokeStyle = '#a78bfa';
+  chartCtx.lineWidth   = 2 * devicePixelRatio;
+  chartCtx.lineJoin    = 'round';
+  chartCtx.stroke();
+
+  // dot at current value
+  const last  = chartData[chartData.length - 1];
+  const dotX  = pad.left + iw;
+  const dotY  = pad.top  + ih * (1 - last.v);
+  chartCtx.beginPath();
+  chartCtx.arc(dotX, dotY, 4 * devicePixelRatio, 0, Math.PI * 2);
+  chartCtx.fillStyle   = '#f9a8d4';
+  chartCtx.shadowColor = '#f9a8d4';
+  chartCtx.shadowBlur  = 8 * devicePixelRatio;
+  chartCtx.fill();
+  chartCtx.shadowBlur  = 0;
 }
 
 // ── Camera ───────────────────────────────────────────────
@@ -433,7 +461,9 @@ btnReset.addEventListener('click', () => {
   if (!confirm('Forget all stored faces?')) return;
   localStorage.removeItem(STORAGE_KEY);
   knownFaces = []; nextId = 1;
+  chartData  = []; lastSample = 0; currentHappy = null;
   updateKnownCount();
+  drawChart();
 });
 
 // ── Drawing ──────────────────────────────────────────────
@@ -444,38 +474,22 @@ function dominant(expressions) {
 }
 
 function drawBoxes(results) {
-  ctx.clearRect(0, 0, overlay.width, overlay.height);
+  overlayCtx.clearRect(0, 0, overlay.width, overlay.height);
   const sx = overlay.width  / (video.videoWidth  || overlay.width);
   const sy = overlay.height / (video.videoHeight || overlay.height);
 
-  results.forEach(({ detection, personId, attention }) => {
+  results.forEach(({ detection, personId }) => {
     const { x, y, width, height } = detection.box;
-    const idColor  = colorFor(personId);
-    const attColor = attentionColor(attention);
-
-    // main box in person color
-    ctx.strokeStyle = idColor;
-    ctx.lineWidth   = 2.5;
-    ctx.shadowColor = idColor;
-    ctx.shadowBlur  = 8;
-    ctx.strokeRect(x * sx, y * sy, width * sx, height * sy);
-    ctx.shadowBlur  = 0;
-
-    // person label
-    ctx.fillStyle = idColor;
-    ctx.font      = 'bold 13px Segoe UI, sans-serif';
-    ctx.fillText(`P${personId}`, x * sx + 4, y * sy - 16);
-
-    // attention indicator dot
-    const dotX = (x + width) * sx - 10;
-    const dotY = y * sy - 10;
-    ctx.beginPath();
-    ctx.arc(dotX, dotY, 6, 0, Math.PI * 2);
-    ctx.fillStyle   = attColor;
-    ctx.shadowColor = attColor;
-    ctx.shadowBlur  = 6;
-    ctx.fill();
-    ctx.shadowBlur  = 0;
+    const color = colorFor(personId);
+    overlayCtx.strokeStyle = color;
+    overlayCtx.lineWidth   = 2.5;
+    overlayCtx.shadowColor = color;
+    overlayCtx.shadowBlur  = 8;
+    overlayCtx.strokeRect(x * sx, y * sy, width * sx, height * sy);
+    overlayCtx.shadowBlur  = 0;
+    overlayCtx.fillStyle   = color;
+    overlayCtx.font        = 'bold 13px Segoe UI, sans-serif';
+    overlayCtx.fillText(`P${personId}`, x * sx + 4, y * sy - 6);
   });
 }
 
@@ -484,36 +498,27 @@ function updateUI(results) {
   faceNumEl.textContent = results.length;
 
   if (results.length === 0) {
+    currentHappy             = null;
     happyVal.textContent     = '—';
-    attentionVal.textContent = '—';
     happyBar.style.width     = '0%';
-    attentionBar.style.width = '0%';
     faceCards.innerHTML      = '';
     noFaceEl.textContent     = 'No face detected';
     return;
   }
   noFaceEl.textContent = '';
 
-  const n = results.length;
-  const avgHappy     = results.reduce((s, r) => s + (r.expressions.happy || 0), 0) / n;
-  const avgAttention = results.reduce((s, r) => s + r.attention, 0) / n;
+  const avg = results.reduce((s, r) => s + (r.expressions.happy || 0), 0) / results.length;
+  currentHappy = avg;
 
-  const hp = Math.round(avgHappy     * 100);
-  const ap = Math.round(avgAttention * 100);
-
-  happyVal.textContent     = hp + '%';
-  happyBar.style.width     = hp + '%';
-  attentionVal.textContent = ap + '%';
-  attentionBar.style.width = ap + '%';
-  attentionVal.style.color = attentionColor(avgAttention);
+  const pct = Math.round(avg * 100);
+  happyVal.textContent = pct + '%';
+  happyBar.style.width = pct + '%';
 
   faceCards.innerHTML = '';
-  results.forEach(({ personId, isNew, expressions, attention }) => {
-    const dom    = dominant(expressions);
-    const happy  = Math.round((expressions.happy || 0) * 100);
-    const attPct = Math.round(attention * 100);
-    const color  = colorFor(personId);
-    const aColor = attentionColor(attention);
+  results.forEach(({ personId, isNew, expressions }) => {
+    const dom   = dominant(expressions);
+    const happy = Math.round((expressions.happy || 0) * 100);
+    const color = colorFor(personId);
 
     const card = document.createElement('div');
     card.className = 'face-card';
@@ -521,22 +526,7 @@ function updateUI(results) {
     card.innerHTML = `
       <div class="fc-id" style="color:${color}">Person ${personId}</div>
       <div class="fc-emotion">${EMOJI[dom]} ${dom}</div>
-      <div class="fc-stats">
-        <div class="fc-stat-row">
-          <span class="fc-stat-icon">😊</span>
-          <div class="fc-mini-track">
-            <div class="fc-mini-fill" style="width:${happy}%;background:#a78bfa"></div>
-          </div>
-          <span class="fc-stat-pct">${happy}%</span>
-        </div>
-        <div class="fc-stat-row">
-          <span class="fc-stat-icon">🎯</span>
-          <div class="fc-mini-track">
-            <div class="fc-mini-fill" style="width:${attPct}%;background:${aColor}"></div>
-          </div>
-          <span class="fc-stat-pct" style="color:${aColor}">${attPct}%</span>
-        </div>
-      </div>
+      <div class="fc-happy">😊 ${happy}%</div>
       ${isNew ? '<div class="fc-new">✦ New face saved</div>' : ''}`;
     faceCards.appendChild(card);
   });
@@ -554,20 +544,15 @@ async function detectLoop() {
 
     const results = detections.map(d => {
       const { id, isNew } = assignId(d.descriptor);
-      return {
-        detection:   d.detection,
-        expressions: d.expressions,
-        personId:    id,
-        isNew,
-        attention:   computeAttention(d.landmarks)
-      };
+      return { detection: d.detection, expressions: d.expressions, personId: id, isNew };
     });
 
     drawBoxes(results);
     updateUI(results);
+    sampleHappiness();
   } catch (_) {}
 
-  setTimeout(detectLoop, INTERVAL);
+  setTimeout(detectLoop, DETECT_INTERVAL);
 }
 
 // ── Init ──────────────────────────────────────────────────
@@ -577,6 +562,9 @@ async function init() {
     return;
   }
   loadStorage();
+  resizeChart();
+  window.addEventListener('resize', resizeChart);
+
   try {
     setStatus('Loading models (first load ~10s)…');
     await Promise.all([
