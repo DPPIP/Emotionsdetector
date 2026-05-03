@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emotion Detector</title>
+  <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d0d0d;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      gap: 2rem;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: #ffffff;
+    }
+
+    h1 span {
+      color: #7c6af7;
+    }
+
+    #status {
+      font-size: 0.9rem;
+      color: #888;
+      min-height: 1.2em;
+      text-align: center;
+    }
+
+    #status.error { color: #f87171; }
+    #status.ok    { color: #4ade80; }
+
+    /* video wrapper */
+    #cam-wrap {
+      position: relative;
+      width: 640px;
+      max-width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 0 2px #2a2a2a, 0 8px 32px rgba(0,0,0,0.6);
+      background: #111;
+      aspect-ratio: 4/3;
+    }
+
+    #video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scaleX(-1); /* mirror */
+    }
+
+    #overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      transform: scaleX(-1); /* mirror to match video */
+      pointer-events: none;
+    }
+
+    /* emotion panel */
+    #emotions {
+      width: 640px;
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .emotion-row {
+      display: grid;
+      grid-template-columns: 110px 1fr 52px;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .emotion-label {
+      font-size: 0.85rem;
+      text-transform: capitalize;
+      color: #aaa;
+      transition: color 0.3s;
+    }
+
+    .emotion-row.dominant .emotion-label {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .bar-track {
+      background: #1e1e1e;
+      border-radius: 99px;
+      height: 8px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: #3a3a5c;
+      transition: width 0.2s ease, background 0.3s;
+      width: 0%;
+    }
+
+    .emotion-row.dominant .bar-fill {
+      background: linear-gradient(90deg, #7c6af7, #a78bfa);
+      box-shadow: 0 0 8px #7c6af766;
+    }
+
+    .emotion-pct {
+      font-size: 0.8rem;
+      color: #666;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      transition: color 0.3s;
+    }
+
+    .emotion-row.dominant .emotion-pct { color: #c4b5fd; }
+
+    /* dominant badge */
+    #dominant-badge {
+      font-size: 2.2rem;
+      letter-spacing: 0.04em;
+      font-weight: 800;
+      color: #fff;
+      text-align: center;
+      min-height: 2.8rem;
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    #dominant-badge.visible { opacity: 1; }
+
+    #no-face {
+      font-size: 0.85rem;
+      color: #555;
+      text-align: center;
+      min-height: 1.2em;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Emotion <span>Detector</span></h1>
+  <p id="status">Loading models…</p>
+
+  <div id="cam-wrap">
+    <video id="video" autoplay muted playsinline></video>
+    <canvas id="overlay"></canvas>
+  </div>
+
+  <div id="dominant-badge"></div>
+  <p id="no-face"></p>
+
+  <div id="emotions">
+    <!-- rows injected by JS -->
+  </div>
+
+<script>
+const EMOTIONS = ['happy','sad','angry','fearful','disgusted','surprised','neutral'];
+const EMOJI    = { happy:'😊', sad:'😢', angry:'😠', fearful:'😨', disgusted:'🤢', surprised:'😲', neutral:'😐' };
+const MODEL_URL = 'https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@master/weights';
+const INTERVAL  = 200; // ms
+
+const statusEl  = document.getElementById('status');
+const video     = document.getElementById('video');
+const overlay   = document.getElementById('overlay');
+const ctx       = overlay.getContext('2d');
+const badgeEl   = document.getElementById('dominant-badge');
+const noFaceEl  = document.getElementById('no-face');
+const emotionsEl= document.getElementById('emotions');
+
+// --- Build emotion rows ---
+const rows = {};
+EMOTIONS.forEach(em => {
+  const row = document.createElement('div');
+  row.className = 'emotion-row';
+  row.id = `row-${em}`;
+
+  const label = document.createElement('span');
+  label.className = 'emotion-label';
+  label.textContent = em;
+
+  const track = document.createElement('div');
+  track.className = 'bar-track';
+  const fill = document.createElement('div');
+  fill.className = 'bar-fill';
+  fill.id = `bar-${em}`;
+  track.appendChild(fill);
+
+  const pct = document.createElement('span');
+  pct.className = 'emotion-pct';
+  pct.id = `pct-${em}`;
+  pct.textContent = '0%';
+
+  row.appendChild(label);
+  row.appendChild(track);
+  row.appendChild(pct);
+  emotionsEl.appendChild(row);
+  rows[em] = row;
+});
+
+function setStatus(msg, cls = '') {
+  statusEl.textContent = msg;
+  statusEl.className = cls;
+}
+
+function syncOverlaySize() {
+  overlay.width  = video.videoWidth  || video.offsetWidth;
+  overlay.height = video.videoHeight || video.offsetHeight;
+}
+
+function drawBox(detection) {
+  const { x, y, width, height } = detection.detection.box;
+  const scaleX = overlay.width  / (video.videoWidth  || overlay.width);
+  const scaleY = overlay.height / (video.videoHeight || overlay.height);
+
+  ctx.clearRect(0, 0, overlay.width, overlay.height);
+  ctx.strokeStyle = '#7c6af7';
+  ctx.lineWidth   = 2.5;
+  ctx.shadowColor = '#7c6af7';
+  ctx.shadowBlur  = 8;
+  ctx.strokeRect(x * scaleX, y * scaleY, width * scaleX, height * scaleY);
+  ctx.shadowBlur  = 0;
+}
+
+function updateEmotions(expressions) {
+  // find dominant
+  let dominant = EMOTIONS[0];
+  EMOTIONS.forEach(em => {
+    if (expressions[em] > expressions[dominant]) dominant = em;
+  });
+
+  EMOTIONS.forEach(em => {
+    const val = expressions[em] || 0;
+    const pct = Math.round(val * 100);
+    document.getElementById(`bar-${em}`).style.width = pct + '%';
+    document.getElementById(`pct-${em}`).textContent = pct + '%';
+    rows[em].classList.toggle('dominant', em === dominant);
+  });
+
+  badgeEl.textContent = `${EMOJI[dominant]}  ${dominant}`;
+  badgeEl.classList.add('visible');
+  noFaceEl.textContent = '';
+}
+
+function clearEmotions() {
+  EMOTIONS.forEach(em => {
+    document.getElementById(`bar-${em}`).style.width = '0%';
+    document.getElementById(`pct-${em}`).textContent = '0%';
+    rows[em].classList.remove('dominant');
+  });
+  badgeEl.classList.remove('visible');
+  ctx.clearRect(0, 0, overlay.width, overlay.height);
+}
+
+async function detectLoop() {
+  syncOverlaySize();
+  try {
+    const result = await faceapi
+      .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 }))
+      .withFaceExpressions();
+
+    if (result) {
+      drawBox(result);
+      updateEmotions(result.expressions);
+      noFaceEl.textContent = '';
+    } else {
+      clearEmotions();
+      noFaceEl.textContent = 'No face detected';
+    }
+  } catch (err) {
+    // silently skip frame errors
+  }
+  setTimeout(detectLoop, INTERVAL);
+}
+
+async function startCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } });
+    video.srcObject = stream;
+    await new Promise(res => video.onloadedmetadata = res);
+    syncOverlaySize();
+    setStatus('Running — look at the camera', 'ok');
+    detectLoop();
+  } catch (err) {
+    if (err.name === 'NotAllowedError') {
+      setStatus('Camera access denied. Please allow camera and reload.', 'error');
+    } else if (err.name === 'NotFoundError') {
+      setStatus('No camera found on this device.', 'error');
+    } else {
+      setStatus(`Camera error: ${err.message}`, 'error');
+    }
+  }
+}
+
+async function init() {
+  if (!navigator.mediaDevices?.getUserMedia) {
+    setStatus('getUserMedia not supported. Use HTTPS or a modern browser.', 'error');
+    return;
+  }
+  try {
+    setStatus('Loading models…');
+    await Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+      faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
+    ]);
+    setStatus('Models loaded — starting camera…');
+    await startCamera();
+  } catch (err) {
+    setStatus(`Failed to load models: ${err.message}. Make sure /models folder is present.`, 'error');
+  }
+}
+
+// Wait for face-api.js to be ready (defer ensures DOM is ready too)
+window.addEventListener('load', init);
+</script>
+</body>
+</html>
