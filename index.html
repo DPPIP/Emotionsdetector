@@ -20,19 +20,42 @@
       gap: 1.2rem;
     }
 
-    h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      color: #fff;
+    header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: min(640px, 100%);
+      justify-content: space-between;
     }
+
+    h1 { font-size: 1.5rem; font-weight: 700; color: #fff; }
     h1 span { color: #7c6af7; }
+
+    #known-count {
+      font-size: 0.78rem;
+      color: #555;
+      white-space: nowrap;
+    }
+    #known-count b { color: #a78bfa; }
+
+    #btn-reset {
+      background: none;
+      border: 1px solid #2a2a2a;
+      color: #555;
+      border-radius: 6px;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    #btn-reset:hover { border-color: #f87171; color: #f87171; }
 
     #status {
       font-size: 0.85rem;
-      color: #666;
+      color: #555;
       min-height: 1.2em;
       text-align: center;
+      width: min(640px, 100%);
     }
     #status.error { color: #f87171; }
     #status.ok    { color: #4ade80; }
@@ -63,24 +86,23 @@
     }
     #overlay.mirror { transform: scaleX(-1); }
 
-    /* flip button */
     #btn-flip {
       position: absolute;
       bottom: 12px; right: 12px;
-      background: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.1);
       border: none;
       border-radius: 50%;
       width: 48px; height: 48px;
       font-size: 1.4rem;
       cursor: pointer;
       backdrop-filter: blur(6px);
-      transition: background 0.2s, transform 0.3s;
+      transition: background 0.2s, transform 0.35s;
       display: flex; align-items: center; justify-content: center;
       z-index: 10;
     }
-    #btn-flip:active { background: rgba(124,106,247,0.5); transform: rotate(180deg); }
+    #btn-flip:active { background: rgba(124,106,247,0.4); transform: rotate(180deg); }
 
-    /* ── group happiness meter ── */
+    /* ── group happiness ── */
     #happiness-section {
       width: min(640px, 100%);
       background: #141414;
@@ -96,38 +118,21 @@
       margin-bottom: 0.8rem;
     }
 
-    #happiness-title {
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #888;
-    }
-
-    #face-count {
-      font-size: 0.8rem;
-      color: #555;
-    }
+    #happiness-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em; color: #666; }
+    #face-count      { font-size: 0.8rem; color: #444; }
     #face-count span { color: #a78bfa; font-weight: 700; }
 
     #happiness-value {
-      font-size: 3rem;
-      font-weight: 900;
-      line-height: 1;
-      color: #fff;
-      margin-bottom: 0.5rem;
+      font-size: 3rem; font-weight: 900; line-height: 1;
+      color: #fff; margin-bottom: 0.5rem;
       font-variant-numeric: tabular-nums;
     }
 
     #happiness-bar-track {
-      background: #1e1e1e;
-      border-radius: 99px;
-      height: 12px;
-      overflow: hidden;
+      background: #1e1e1e; border-radius: 99px; height: 12px; overflow: hidden;
     }
-
     #happiness-bar-fill {
-      height: 100%;
-      border-radius: 99px;
+      height: 100%; border-radius: 99px;
       background: linear-gradient(90deg, #7c6af7, #f9a8d4);
       box-shadow: 0 0 10px #7c6af755;
       transition: width 0.25s ease;
@@ -146,44 +151,55 @@
       background: #141414;
       border: 1px solid #222;
       border-radius: 10px;
-      padding: 0.6rem 0.9rem;
-      flex: 1 1 130px;
+      padding: 0.65rem 1rem;
+      flex: 1 1 140px;
       min-width: 120px;
+      transition: border-color 0.3s;
     }
 
-    .face-card-title {
-      font-size: 0.72rem;
-      color: #555;
+    .fc-id {
+      font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.35rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.3rem;
+      font-weight: 700;
     }
 
-    .face-card-emotion {
-      font-size: 1.1rem;
+    .fc-emotion {
+      font-size: 1.05rem;
       font-weight: 700;
       color: #fff;
       text-transform: capitalize;
     }
 
-    .face-card-happy {
+    .fc-happy {
       font-size: 0.78rem;
       color: #a78bfa;
       margin-top: 0.15rem;
     }
 
-    /* ── no face ── */
+    .fc-new {
+      font-size: 0.68rem;
+      color: #4ade80;
+      margin-top: 0.2rem;
+    }
+
     #no-face {
-      font-size: 0.85rem;
-      color: #444;
-      text-align: center;
-      min-height: 1.2em;
+      font-size: 0.82rem; color: #3a3a3a;
+      text-align: center; min-height: 1.2em;
     }
   </style>
 </head>
 <body>
 
-<h1>Emotion <span>Detector</span></h1>
+<header>
+  <h1>Emotion <span>Detector</span></h1>
+  <div style="display:flex;align-items:center;gap:0.7rem">
+    <span id="known-count">Known: <b id="known-num">0</b></span>
+    <button id="btn-reset" title="Forget all stored faces">Reset</button>
+  </div>
+</header>
+
 <p id="status">Loading models…</p>
 
 <div id="cam-wrap">
@@ -197,7 +213,7 @@
 <div id="happiness-section">
   <div id="happiness-header">
     <span id="happiness-title">😊 Group Happiness</span>
-    <span id="face-count">Faces detected: <span id="face-num">0</span></span>
+    <span id="face-count">Faces: <span id="face-num">0</span></span>
   </div>
   <div id="happiness-value">—</div>
   <div id="happiness-bar-track">
@@ -208,37 +224,111 @@
 <div id="face-cards"></div>
 
 <script>
-const MODEL_URL = 'https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@master/weights';
-const INTERVAL  = 200;
+// ── Config ──────────────────────────────────────────────
+const MODEL_URL       = 'https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@master/weights';
+const INTERVAL        = 200;   // ms between detections
+const MATCH_THRESHOLD = 0.50;  // euclidean distance threshold
+const MAX_DESCRIPTORS = 10;    // stored samples per person
+const STORAGE_KEY     = 'emo-detector-faces-v1';
 
-const EMOJI = { happy:'😊', sad:'😢', angry:'😠', fearful:'😨', disgusted:'🤢', surprised:'😲', neutral:'😐' };
 const COLORS = ['#7c6af7','#f472b6','#34d399','#fb923c','#60a5fa','#f87171','#a3e635','#facc15'];
+const EMOJI  = { happy:'😊', sad:'😢', angry:'😠', fearful:'😨', disgusted:'🤢', surprised:'😲', neutral:'😐' };
 
+// ── DOM ──────────────────────────────────────────────────
 const statusEl   = document.getElementById('status');
 const video      = document.getElementById('video');
 const overlay    = document.getElementById('overlay');
 const ctx        = overlay.getContext('2d');
 const btnFlip    = document.getElementById('btn-flip');
+const btnReset   = document.getElementById('btn-reset');
 const noFaceEl   = document.getElementById('no-face');
 const faceNumEl  = document.getElementById('face-num');
+const knownNumEl = document.getElementById('known-num');
 const happyVal   = document.getElementById('happiness-value');
 const happyBar   = document.getElementById('happiness-bar-fill');
 const faceCards  = document.getElementById('face-cards');
 
+// ── State ────────────────────────────────────────────────
 let currentStream = null;
-let facingMode    = 'user'; // front camera by default
+let facingMode    = 'user';
 
-function setStatus(msg, cls = '') {
-  statusEl.textContent = msg;
-  statusEl.className   = cls;
+// knownFaces: [{id: number, descriptors: Float32Array[]}]
+let knownFaces = [];
+let nextId     = 1;
+
+// ── Persistence ──────────────────────────────────────────
+function loadStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    knownFaces = data.map(f => ({
+      id: f.id,
+      descriptors: f.descriptors.map(d => new Float32Array(d))
+    }));
+    if (knownFaces.length) {
+      nextId = Math.max(...knownFaces.map(f => f.id)) + 1;
+    }
+  } catch (_) {
+    knownFaces = []; nextId = 1;
+  }
+  updateKnownCount();
 }
+
+function saveStorage() {
+  try {
+    const data = knownFaces.map(f => ({
+      id: f.id,
+      descriptors: f.descriptors.map(d => Array.from(d))
+    }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (_) {}
+  updateKnownCount();
+}
+
+function updateKnownCount() {
+  knownNumEl.textContent = knownFaces.length;
+}
+
+// ── Face matching ─────────────────────────────────────────
+function bestMatch(descriptor) {
+  let bestId   = null;
+  let bestDist = Infinity;
+  for (const face of knownFaces) {
+    for (const stored of face.descriptors) {
+      const dist = faceapi.euclideanDistance(descriptor, stored);
+      if (dist < bestDist) { bestDist = dist; bestId = face.id; }
+    }
+  }
+  return bestDist < MATCH_THRESHOLD ? { id: bestId, dist: bestDist } : null;
+}
+
+// returns { id, isNew }
+function assignId(descriptor) {
+  const match = bestMatch(descriptor);
+  if (match) {
+    // update stored descriptors with this new sample
+    const face = knownFaces.find(f => f.id === match.id);
+    face.descriptors.push(descriptor);
+    if (face.descriptors.length > MAX_DESCRIPTORS) face.descriptors.shift();
+    saveStorage();
+    return { id: match.id, isNew: false };
+  } else {
+    const id = nextId++;
+    knownFaces.push({ id, descriptors: [descriptor] });
+    saveStorage();
+    return { id, isNew: true };
+  }
+}
+
+// ── Camera ───────────────────────────────────────────────
+function setStatus(msg, cls = '') { statusEl.textContent = msg; statusEl.className = cls; }
 
 function syncOverlay() {
   overlay.width  = video.videoWidth  || video.offsetWidth;
   overlay.height = video.videoHeight || video.offsetHeight;
 }
 
-// mirror front cam, don't mirror back cam
 function applyMirror() {
   const m = facingMode === 'user';
   video.classList.toggle('mirror', m);
@@ -247,7 +337,6 @@ function applyMirror() {
 
 async function startCamera() {
   if (currentStream) currentStream.getTracks().forEach(t => t.stop());
-
   try {
     currentStream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode, width: { ideal: 1280 }, height: { ideal: 960 } }
@@ -258,7 +347,7 @@ async function startCamera() {
     syncOverlay();
     setStatus('Running — point camera at faces', 'ok');
   } catch (err) {
-    if (err.name === 'NotAllowedError') setStatus('Camera access denied. Please allow camera and reload.', 'error');
+    if (err.name === 'NotAllowedError') setStatus('Camera access denied. Please allow and reload.', 'error');
     else if (err.name === 'NotFoundError') setStatus('No camera found.', 'error');
     else setStatus(`Camera error: ${err.message}`, 'error');
   }
@@ -269,36 +358,44 @@ btnFlip.addEventListener('click', async () => {
   await startCamera();
 });
 
+btnReset.addEventListener('click', () => {
+  if (!confirm('Forget all stored faces?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  knownFaces = []; nextId = 1;
+  updateKnownCount();
+});
+
+// ── Drawing ──────────────────────────────────────────────
+function colorFor(id) { return COLORS[(id - 1) % COLORS.length]; }
+
 function dominant(expressions) {
   return Object.entries(expressions).reduce((a, b) => b[1] > a[1] ? b : a)[0];
 }
 
-function drawBoxes(detections) {
+function drawBoxes(results) {
   ctx.clearRect(0, 0, overlay.width, overlay.height);
-  const scaleX = overlay.width  / (video.videoWidth  || overlay.width);
-  const scaleY = overlay.height / (video.videoHeight || overlay.height);
+  const sx = overlay.width  / (video.videoWidth  || overlay.width);
+  const sy = overlay.height / (video.videoHeight || overlay.height);
 
-  detections.forEach((d, i) => {
-    const { x, y, width, height } = d.detection.box;
-    const color = COLORS[i % COLORS.length];
+  results.forEach(({ detection, personId }) => {
+    const { x, y, width, height } = detection.box;
+    const color = colorFor(personId);
     ctx.strokeStyle = color;
     ctx.lineWidth   = 2.5;
     ctx.shadowColor = color;
-    ctx.shadowBlur  = 8;
-    ctx.strokeRect(x * scaleX, y * scaleY, width * scaleX, height * scaleY);
+    ctx.shadowBlur  = 10;
+    ctx.strokeRect(x * sx, y * sy, width * sx, height * sy);
     ctx.shadowBlur  = 0;
-
-    // face index label
-    ctx.fillStyle = color;
-    ctx.font = 'bold 13px Segoe UI, sans-serif';
-    ctx.fillText(`#${i + 1}`, x * scaleX + 4, y * scaleY - 5);
+    ctx.fillStyle   = color;
+    ctx.font        = 'bold 13px Segoe UI, sans-serif';
+    ctx.fillText(`P${personId}`, x * sx + 4, y * sy - 6);
   });
 }
 
-function updateHappiness(detections) {
-  faceNumEl.textContent = detections.length;
+function updateUI(results) {
+  faceNumEl.textContent = results.length;
 
-  if (detections.length === 0) {
+  if (results.length === 0) {
     happyVal.textContent = '—';
     happyBar.style.width = '0%';
     faceCards.innerHTML  = '';
@@ -307,53 +404,67 @@ function updateHappiness(detections) {
   }
   noFaceEl.textContent = '';
 
-  // average happiness across all faces
-  const avgHappy = detections.reduce((sum, d) => sum + (d.expressions.happy || 0), 0) / detections.length;
+  const avgHappy = results.reduce((s, r) => s + (r.expressions.happy || 0), 0) / results.length;
   const pct = Math.round(avgHappy * 100);
-  happyVal.textContent  = pct + '%';
-  happyBar.style.width  = pct + '%';
+  happyVal.textContent = pct + '%';
+  happyBar.style.width = pct + '%';
 
-  // per-face cards
   faceCards.innerHTML = '';
-  detections.forEach((d, i) => {
-    const dom   = dominant(d.expressions);
-    const happy = Math.round((d.expressions.happy || 0) * 100);
-    const color = COLORS[i % COLORS.length];
+  results.forEach(({ personId, isNew, expressions }) => {
+    const dom   = dominant(expressions);
+    const happy = Math.round((expressions.happy || 0) * 100);
+    const color = colorFor(personId);
 
     const card = document.createElement('div');
     card.className = 'face-card';
     card.style.borderColor = color + '55';
     card.innerHTML = `
-      <div class="face-card-title" style="color:${color}">Face #${i + 1}</div>
-      <div class="face-card-emotion">${EMOJI[dom]} ${dom}</div>
-      <div class="face-card-happy">😊 Happiness: ${happy}%</div>`;
+      <div class="fc-id" style="color:${color}">Person ${personId}</div>
+      <div class="fc-emotion">${EMOJI[dom]} ${dom}</div>
+      <div class="fc-happy">😊 ${happy}%</div>
+      ${isNew ? '<div class="fc-new">✦ New face saved</div>' : ''}`;
     faceCards.appendChild(card);
   });
 }
 
+// ── Detection loop ────────────────────────────────────────
 async function detectLoop() {
   syncOverlay();
   try {
-    const results = await faceapi
+    const detections = await faceapi
       .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 }))
-      .withFaceExpressions();
+      .withFaceLandmarks(true)   // tiny landmark model
+      .withFaceExpressions()
+      .withFaceDescriptors();
+
+    const results = detections.map(d => {
+      const { id, isNew } = assignId(d.descriptor);
+      return { detection: d.detection, expressions: d.expressions, personId: id, isNew };
+    });
 
     drawBoxes(results);
-    updateHappiness(results);
+    updateUI(results);
   } catch (_) {}
+
   setTimeout(detectLoop, INTERVAL);
 }
 
+// ── Init ──────────────────────────────────────────────────
 async function init() {
   if (!navigator.mediaDevices?.getUserMedia) {
     setStatus('getUserMedia not supported. Use HTTPS.', 'error');
     return;
   }
+
+  loadStorage();
+
   try {
-    setStatus('Loading models…');
+    setStatus('Loading models (first load may take ~10s)…');
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+      faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL),
       faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
+      faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
     ]);
     setStatus('Models loaded — starting camera…');
     await startCamera();
