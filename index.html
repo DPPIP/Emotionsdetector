@@ -201,7 +201,7 @@
 
 <div id="cam-wrap">
   <video id="video" autoplay muted playsinline class="mirror"></video>
-  <canvas id="overlay" class="mirror"></canvas>
+  <canvas id="overlay"></canvas>
   <button id="btn-flip" title="Switch camera">🔄</button>
 </div>
 
@@ -543,8 +543,8 @@ function updateUI(results) {
     card.style.borderColor = color + '55';
     card.innerHTML = `
       <div class="fc-id" style="color:${color}">Person ${personId}</div>
-      <div class="fc-emotion">${EMOJI[dom]} ${dom}</div>
-      <div class="fc-happy">😊 ${happy}%</div>
+      <div class="fc-emotion">${dom}</div>
+      <div class="fc-happy">happy: ${happy}%</div>
       ${isNew ? '<div class="fc-new">✦ New face saved</div>' : ''}`;
     faceCards.appendChild(card);
   });
