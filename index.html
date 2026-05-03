@@ -16,135 +16,166 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2rem 1rem;
-      gap: 2rem;
+      padding: 1.5rem 1rem 3rem;
+      gap: 1.2rem;
     }
 
     h1 {
-      font-size: 1.6rem;
-      font-weight: 600;
+      font-size: 1.5rem;
+      font-weight: 700;
       letter-spacing: 0.05em;
-      color: #ffffff;
+      color: #fff;
     }
-
-    h1 span {
-      color: #7c6af7;
-    }
+    h1 span { color: #7c6af7; }
 
     #status {
-      font-size: 0.9rem;
-      color: #888;
+      font-size: 0.85rem;
+      color: #666;
       min-height: 1.2em;
       text-align: center;
     }
-
     #status.error { color: #f87171; }
     #status.ok    { color: #4ade80; }
 
-    /* video wrapper */
+    /* ── camera wrapper ── */
     #cam-wrap {
       position: relative;
-      width: 640px;
-      max-width: 100%;
-      border-radius: 12px;
+      width: min(640px, 100vw);
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 0 0 2px #2a2a2a, 0 8px 32px rgba(0,0,0,0.6);
       background: #111;
+      box-shadow: 0 0 0 2px #222, 0 8px 32px rgba(0,0,0,.7);
       aspect-ratio: 4/3;
     }
 
     #video {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       object-fit: cover;
       display: block;
-      transform: scaleX(-1); /* mirror */
     }
+    #video.mirror { transform: scaleX(-1); }
 
     #overlay {
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      transform: scaleX(-1); /* mirror to match video */
       pointer-events: none;
     }
+    #overlay.mirror { transform: scaleX(-1); }
 
-    /* emotion panel */
-    #emotions {
-      width: 640px;
-      max-width: 100%;
+    /* flip button */
+    #btn-flip {
+      position: absolute;
+      bottom: 12px; right: 12px;
+      background: rgba(255,255,255,0.12);
+      border: none;
+      border-radius: 50%;
+      width: 48px; height: 48px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: background 0.2s, transform 0.3s;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10;
+    }
+    #btn-flip:active { background: rgba(124,106,247,0.5); transform: rotate(180deg); }
+
+    /* ── group happiness meter ── */
+    #happiness-section {
+      width: min(640px, 100%);
+      background: #141414;
+      border-radius: 14px;
+      padding: 1.1rem 1.4rem;
+      border: 1px solid #222;
+    }
+
+    #happiness-header {
       display: flex;
-      flex-direction: column;
-      gap: 0.55rem;
-    }
-
-    .emotion-row {
-      display: grid;
-      grid-template-columns: 110px 1fr 52px;
       align-items: center;
-      gap: 0.75rem;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
     }
 
-    .emotion-label {
+    #happiness-title {
       font-size: 0.85rem;
-      text-transform: capitalize;
-      color: #aaa;
-      transition: color 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #888;
     }
 
-    .emotion-row.dominant .emotion-label {
+    #face-count {
+      font-size: 0.8rem;
+      color: #555;
+    }
+    #face-count span { color: #a78bfa; font-weight: 700; }
+
+    #happiness-value {
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1;
       color: #fff;
-      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-variant-numeric: tabular-nums;
     }
 
-    .bar-track {
+    #happiness-bar-track {
       background: #1e1e1e;
       border-radius: 99px;
-      height: 8px;
+      height: 12px;
       overflow: hidden;
     }
 
-    .bar-fill {
+    #happiness-bar-fill {
       height: 100%;
       border-radius: 99px;
-      background: #3a3a5c;
-      transition: width 0.2s ease, background 0.3s;
+      background: linear-gradient(90deg, #7c6af7, #f9a8d4);
+      box-shadow: 0 0 10px #7c6af755;
+      transition: width 0.25s ease;
       width: 0%;
     }
 
-    .emotion-row.dominant .bar-fill {
-      background: linear-gradient(90deg, #7c6af7, #a78bfa);
-      box-shadow: 0 0 8px #7c6af766;
+    /* ── face cards ── */
+    #face-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      width: min(640px, 100%);
     }
 
-    .emotion-pct {
-      font-size: 0.8rem;
-      color: #666;
-      text-align: right;
-      font-variant-numeric: tabular-nums;
-      transition: color 0.3s;
+    .face-card {
+      background: #141414;
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 0.6rem 0.9rem;
+      flex: 1 1 130px;
+      min-width: 120px;
     }
 
-    .emotion-row.dominant .emotion-pct { color: #c4b5fd; }
-
-    /* dominant badge */
-    #dominant-badge {
-      font-size: 2.2rem;
-      letter-spacing: 0.04em;
-      font-weight: 800;
-      color: #fff;
-      text-align: center;
-      min-height: 2.8rem;
+    .face-card-title {
+      font-size: 0.72rem;
+      color: #555;
       text-transform: uppercase;
-      opacity: 0;
-      transition: opacity 0.3s;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.35rem;
     }
 
-    #dominant-badge.visible { opacity: 1; }
+    .face-card-emotion {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      text-transform: capitalize;
+    }
 
+    .face-card-happy {
+      font-size: 0.78rem;
+      color: #a78bfa;
+      margin-top: 0.15rem;
+    }
+
+    /* ── no face ── */
     #no-face {
       font-size: 0.85rem;
-      color: #555;
+      color: #444;
       text-align: center;
       min-height: 1.2em;
     }
@@ -152,162 +183,170 @@
 </head>
 <body>
 
-  <h1>Emotion <span>Detector</span></h1>
-  <p id="status">Loading models…</p>
+<h1>Emotion <span>Detector</span></h1>
+<p id="status">Loading models…</p>
 
-  <div id="cam-wrap">
-    <video id="video" autoplay muted playsinline></video>
-    <canvas id="overlay"></canvas>
+<div id="cam-wrap">
+  <video id="video" autoplay muted playsinline class="mirror"></video>
+  <canvas id="overlay" class="mirror"></canvas>
+  <button id="btn-flip" title="Switch camera">🔄</button>
+</div>
+
+<p id="no-face"></p>
+
+<div id="happiness-section">
+  <div id="happiness-header">
+    <span id="happiness-title">😊 Group Happiness</span>
+    <span id="face-count">Faces detected: <span id="face-num">0</span></span>
   </div>
-
-  <div id="dominant-badge"></div>
-  <p id="no-face"></p>
-
-  <div id="emotions">
-    <!-- rows injected by JS -->
+  <div id="happiness-value">—</div>
+  <div id="happiness-bar-track">
+    <div id="happiness-bar-fill"></div>
   </div>
+</div>
+
+<div id="face-cards"></div>
 
 <script>
-const EMOTIONS = ['happy','sad','angry','fearful','disgusted','surprised','neutral'];
-const EMOJI    = { happy:'😊', sad:'😢', angry:'😠', fearful:'😨', disgusted:'🤢', surprised:'😲', neutral:'😐' };
 const MODEL_URL = 'https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@master/weights';
-const INTERVAL  = 200; // ms
+const INTERVAL  = 200;
 
-const statusEl  = document.getElementById('status');
-const video     = document.getElementById('video');
-const overlay   = document.getElementById('overlay');
-const ctx       = overlay.getContext('2d');
-const badgeEl   = document.getElementById('dominant-badge');
-const noFaceEl  = document.getElementById('no-face');
-const emotionsEl= document.getElementById('emotions');
+const EMOJI = { happy:'😊', sad:'😢', angry:'😠', fearful:'😨', disgusted:'🤢', surprised:'😲', neutral:'😐' };
+const COLORS = ['#7c6af7','#f472b6','#34d399','#fb923c','#60a5fa','#f87171','#a3e635','#facc15'];
 
-// --- Build emotion rows ---
-const rows = {};
-EMOTIONS.forEach(em => {
-  const row = document.createElement('div');
-  row.className = 'emotion-row';
-  row.id = `row-${em}`;
+const statusEl   = document.getElementById('status');
+const video      = document.getElementById('video');
+const overlay    = document.getElementById('overlay');
+const ctx        = overlay.getContext('2d');
+const btnFlip    = document.getElementById('btn-flip');
+const noFaceEl   = document.getElementById('no-face');
+const faceNumEl  = document.getElementById('face-num');
+const happyVal   = document.getElementById('happiness-value');
+const happyBar   = document.getElementById('happiness-bar-fill');
+const faceCards  = document.getElementById('face-cards');
 
-  const label = document.createElement('span');
-  label.className = 'emotion-label';
-  label.textContent = em;
-
-  const track = document.createElement('div');
-  track.className = 'bar-track';
-  const fill = document.createElement('div');
-  fill.className = 'bar-fill';
-  fill.id = `bar-${em}`;
-  track.appendChild(fill);
-
-  const pct = document.createElement('span');
-  pct.className = 'emotion-pct';
-  pct.id = `pct-${em}`;
-  pct.textContent = '0%';
-
-  row.appendChild(label);
-  row.appendChild(track);
-  row.appendChild(pct);
-  emotionsEl.appendChild(row);
-  rows[em] = row;
-});
+let currentStream = null;
+let facingMode    = 'user'; // front camera by default
 
 function setStatus(msg, cls = '') {
   statusEl.textContent = msg;
-  statusEl.className = cls;
+  statusEl.className   = cls;
 }
 
-function syncOverlaySize() {
+function syncOverlay() {
   overlay.width  = video.videoWidth  || video.offsetWidth;
   overlay.height = video.videoHeight || video.offsetHeight;
 }
 
-function drawBox(detection) {
-  const { x, y, width, height } = detection.detection.box;
-  const scaleX = overlay.width  / (video.videoWidth  || overlay.width);
-  const scaleY = overlay.height / (video.videoHeight || overlay.height);
-
-  ctx.clearRect(0, 0, overlay.width, overlay.height);
-  ctx.strokeStyle = '#7c6af7';
-  ctx.lineWidth   = 2.5;
-  ctx.shadowColor = '#7c6af7';
-  ctx.shadowBlur  = 8;
-  ctx.strokeRect(x * scaleX, y * scaleY, width * scaleX, height * scaleY);
-  ctx.shadowBlur  = 0;
-}
-
-function updateEmotions(expressions) {
-  // find dominant
-  let dominant = EMOTIONS[0];
-  EMOTIONS.forEach(em => {
-    if (expressions[em] > expressions[dominant]) dominant = em;
-  });
-
-  EMOTIONS.forEach(em => {
-    const val = expressions[em] || 0;
-    const pct = Math.round(val * 100);
-    document.getElementById(`bar-${em}`).style.width = pct + '%';
-    document.getElementById(`pct-${em}`).textContent = pct + '%';
-    rows[em].classList.toggle('dominant', em === dominant);
-  });
-
-  badgeEl.textContent = `${EMOJI[dominant]}  ${dominant}`;
-  badgeEl.classList.add('visible');
-  noFaceEl.textContent = '';
-}
-
-function clearEmotions() {
-  EMOTIONS.forEach(em => {
-    document.getElementById(`bar-${em}`).style.width = '0%';
-    document.getElementById(`pct-${em}`).textContent = '0%';
-    rows[em].classList.remove('dominant');
-  });
-  badgeEl.classList.remove('visible');
-  ctx.clearRect(0, 0, overlay.width, overlay.height);
-}
-
-async function detectLoop() {
-  syncOverlaySize();
-  try {
-    const result = await faceapi
-      .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 }))
-      .withFaceExpressions();
-
-    if (result) {
-      drawBox(result);
-      updateEmotions(result.expressions);
-      noFaceEl.textContent = '';
-    } else {
-      clearEmotions();
-      noFaceEl.textContent = 'No face detected';
-    }
-  } catch (err) {
-    // silently skip frame errors
-  }
-  setTimeout(detectLoop, INTERVAL);
+// mirror front cam, don't mirror back cam
+function applyMirror() {
+  const m = facingMode === 'user';
+  video.classList.toggle('mirror', m);
+  overlay.classList.toggle('mirror', m);
 }
 
 async function startCamera() {
+  if (currentStream) currentStream.getTracks().forEach(t => t.stop());
+
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } });
-    video.srcObject = stream;
+    currentStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode, width: { ideal: 1280 }, height: { ideal: 960 } }
+    });
+    video.srcObject = currentStream;
     await new Promise(res => video.onloadedmetadata = res);
-    syncOverlaySize();
-    setStatus('Running — look at the camera', 'ok');
-    detectLoop();
+    applyMirror();
+    syncOverlay();
+    setStatus('Running — point camera at faces', 'ok');
   } catch (err) {
-    if (err.name === 'NotAllowedError') {
-      setStatus('Camera access denied. Please allow camera and reload.', 'error');
-    } else if (err.name === 'NotFoundError') {
-      setStatus('No camera found on this device.', 'error');
-    } else {
-      setStatus(`Camera error: ${err.message}`, 'error');
-    }
+    if (err.name === 'NotAllowedError') setStatus('Camera access denied. Please allow camera and reload.', 'error');
+    else if (err.name === 'NotFoundError') setStatus('No camera found.', 'error');
+    else setStatus(`Camera error: ${err.message}`, 'error');
   }
+}
+
+btnFlip.addEventListener('click', async () => {
+  facingMode = facingMode === 'user' ? 'environment' : 'user';
+  await startCamera();
+});
+
+function dominant(expressions) {
+  return Object.entries(expressions).reduce((a, b) => b[1] > a[1] ? b : a)[0];
+}
+
+function drawBoxes(detections) {
+  ctx.clearRect(0, 0, overlay.width, overlay.height);
+  const scaleX = overlay.width  / (video.videoWidth  || overlay.width);
+  const scaleY = overlay.height / (video.videoHeight || overlay.height);
+
+  detections.forEach((d, i) => {
+    const { x, y, width, height } = d.detection.box;
+    const color = COLORS[i % COLORS.length];
+    ctx.strokeStyle = color;
+    ctx.lineWidth   = 2.5;
+    ctx.shadowColor = color;
+    ctx.shadowBlur  = 8;
+    ctx.strokeRect(x * scaleX, y * scaleY, width * scaleX, height * scaleY);
+    ctx.shadowBlur  = 0;
+
+    // face index label
+    ctx.fillStyle = color;
+    ctx.font = 'bold 13px Segoe UI, sans-serif';
+    ctx.fillText(`#${i + 1}`, x * scaleX + 4, y * scaleY - 5);
+  });
+}
+
+function updateHappiness(detections) {
+  faceNumEl.textContent = detections.length;
+
+  if (detections.length === 0) {
+    happyVal.textContent = '—';
+    happyBar.style.width = '0%';
+    faceCards.innerHTML  = '';
+    noFaceEl.textContent = 'No face detected';
+    return;
+  }
+  noFaceEl.textContent = '';
+
+  // average happiness across all faces
+  const avgHappy = detections.reduce((sum, d) => sum + (d.expressions.happy || 0), 0) / detections.length;
+  const pct = Math.round(avgHappy * 100);
+  happyVal.textContent  = pct + '%';
+  happyBar.style.width  = pct + '%';
+
+  // per-face cards
+  faceCards.innerHTML = '';
+  detections.forEach((d, i) => {
+    const dom   = dominant(d.expressions);
+    const happy = Math.round((d.expressions.happy || 0) * 100);
+    const color = COLORS[i % COLORS.length];
+
+    const card = document.createElement('div');
+    card.className = 'face-card';
+    card.style.borderColor = color + '55';
+    card.innerHTML = `
+      <div class="face-card-title" style="color:${color}">Face #${i + 1}</div>
+      <div class="face-card-emotion">${EMOJI[dom]} ${dom}</div>
+      <div class="face-card-happy">😊 Happiness: ${happy}%</div>`;
+    faceCards.appendChild(card);
+  });
+}
+
+async function detectLoop() {
+  syncOverlay();
+  try {
+    const results = await faceapi
+      .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 }))
+      .withFaceExpressions();
+
+    drawBoxes(results);
+    updateHappiness(results);
+  } catch (_) {}
+  setTimeout(detectLoop, INTERVAL);
 }
 
 async function init() {
   if (!navigator.mediaDevices?.getUserMedia) {
-    setStatus('getUserMedia not supported. Use HTTPS or a modern browser.', 'error');
+    setStatus('getUserMedia not supported. Use HTTPS.', 'error');
     return;
   }
   try {
@@ -318,12 +357,12 @@ async function init() {
     ]);
     setStatus('Models loaded — starting camera…');
     await startCamera();
+    detectLoop();
   } catch (err) {
-    setStatus(`Failed to load models: ${err.message}. Make sure /models folder is present.`, 'error');
+    setStatus(`Failed to load models: ${err.message}`, 'error');
   }
 }
 
-// Wait for face-api.js to be ready (defer ensures DOM is ready too)
 window.addEventListener('load', init);
 </script>
 </body>
