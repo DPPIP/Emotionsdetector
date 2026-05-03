@@ -478,18 +478,35 @@ function drawBoxes(results) {
   const sx = overlay.width  / (video.videoWidth  || overlay.width);
   const sy = overlay.height / (video.videoHeight || overlay.height);
 
-  results.forEach(({ detection, personId }) => {
+  results.forEach(({ detection, personId, expressions }) => {
     const { x, y, width, height } = detection.box;
     const color = colorFor(personId);
+    const dom   = dominant(expressions);
+    const scale = Math.max(0.7, Math.min(1, width * sx / 120)); // scale labels to box size
+
     overlayCtx.strokeStyle = color;
     overlayCtx.lineWidth   = 2.5;
     overlayCtx.shadowColor = color;
     overlayCtx.shadowBlur  = 8;
     overlayCtx.strokeRect(x * sx, y * sy, width * sx, height * sy);
     overlayCtx.shadowBlur  = 0;
-    overlayCtx.fillStyle   = color;
-    overlayCtx.font        = 'bold 13px Segoe UI, sans-serif';
-    overlayCtx.fillText(`P${personId}`, x * sx + 4, y * sy - 6);
+
+    // pill background behind labels
+    const fontSize  = Math.round(12 * scale);
+    const labelText = `P${personId}  ${EMOJI[dom]} ${dom}`;
+    overlayCtx.font = `bold ${fontSize}px Segoe UI, sans-serif`;
+    const tw = overlayCtx.measureText(labelText).width;
+    const ph = fontSize + 6;
+    const px = x * sx;
+    const py = y * sy - ph - 2;
+
+    overlayCtx.fillStyle = 'rgba(0,0,0,0.55)';
+    overlayCtx.beginPath();
+    overlayCtx.roundRect(px, py, tw + 10, ph, 4);
+    overlayCtx.fill();
+
+    overlayCtx.fillStyle = color;
+    overlayCtx.fillText(labelText, px + 5, py + ph - 4);
   });
 }
 
