@@ -31,11 +31,7 @@
     h1 { font-size: 1.5rem; font-weight: 700; color: #fff; }
     h1 span { color: #7c6af7; }
 
-    #known-count {
-      font-size: 0.78rem;
-      color: #555;
-      white-space: nowrap;
-    }
+    #known-count { font-size: 0.78rem; color: #555; white-space: nowrap; }
     #known-count b { color: #a78bfa; }
 
     #btn-reset {
@@ -51,16 +47,14 @@
     #btn-reset:hover { border-color: #f87171; color: #f87171; }
 
     #status {
-      font-size: 0.85rem;
-      color: #555;
-      min-height: 1.2em;
-      text-align: center;
+      font-size: 0.85rem; color: #555;
+      min-height: 1.2em; text-align: center;
       width: min(640px, 100%);
     }
     #status.error { color: #f87171; }
     #status.ok    { color: #4ade80; }
 
-    /* ── camera wrapper ── */
+    /* ── camera ── */
     #cam-wrap {
       position: relative;
       width: min(640px, 100vw);
@@ -71,30 +65,17 @@
       aspect-ratio: 4/3;
     }
 
-    #video {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+    #video { width: 100%; height: 100%; object-fit: cover; display: block; }
     #video.mirror { transform: scaleX(-1); }
-
-    #overlay {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-    }
+    #overlay { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
     #overlay.mirror { transform: scaleX(-1); }
 
     #btn-flip {
-      position: absolute;
-      bottom: 12px; right: 12px;
+      position: absolute; bottom: 12px; right: 12px;
       background: rgba(255,255,255,0.1);
-      border: none;
-      border-radius: 50%;
+      border: none; border-radius: 50%;
       width: 48px; height: 48px;
-      font-size: 1.4rem;
-      cursor: pointer;
+      font-size: 1.4rem; cursor: pointer;
       backdrop-filter: blur(6px);
       transition: background 0.2s, transform 0.35s;
       display: flex; align-items: center; justify-content: center;
@@ -102,42 +83,71 @@
     }
     #btn-flip:active { background: rgba(124,106,247,0.4); transform: rotate(180deg); }
 
-    /* ── group happiness ── */
-    #happiness-section {
+    /* ── metric panels ── */
+    #metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
       width: min(640px, 100%);
+    }
+
+    .metric-panel {
       background: #141414;
       border-radius: 14px;
-      padding: 1.1rem 1.4rem;
+      padding: 1rem 1.2rem;
       border: 1px solid #222;
     }
 
-    #happiness-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.8rem;
+    .metric-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #555;
+      margin-bottom: 0.5rem;
     }
 
-    #happiness-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em; color: #666; }
-    #face-count      { font-size: 0.8rem; color: #444; }
-    #face-count span { color: #a78bfa; font-weight: 700; }
-
-    #happiness-value {
-      font-size: 3rem; font-weight: 900; line-height: 1;
-      color: #fff; margin-bottom: 0.5rem;
+    .metric-value {
+      font-size: 2.4rem;
+      font-weight: 900;
+      line-height: 1;
+      color: #fff;
+      margin-bottom: 0.4rem;
       font-variant-numeric: tabular-nums;
     }
 
-    #happiness-bar-track {
-      background: #1e1e1e; border-radius: 99px; height: 12px; overflow: hidden;
+    .metric-bar-track {
+      background: #1e1e1e;
+      border-radius: 99px;
+      height: 8px;
+      overflow: hidden;
     }
-    #happiness-bar-fill {
-      height: 100%; border-radius: 99px;
-      background: linear-gradient(90deg, #7c6af7, #f9a8d4);
-      box-shadow: 0 0 10px #7c6af755;
-      transition: width 0.25s ease;
+
+    .metric-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.25s ease, background 0.4s ease;
       width: 0%;
     }
+
+    #happiness-bar-fill {
+      background: linear-gradient(90deg, #7c6af7, #f9a8d4);
+      box-shadow: 0 0 8px #7c6af755;
+    }
+
+    #attention-bar-fill {
+      background: linear-gradient(90deg, #f87171, #facc15, #4ade80);
+      box-shadow: 0 0 8px #4ade8055;
+    }
+
+    /* face count row */
+    #face-count-row {
+      font-size: 0.78rem;
+      color: #444;
+      width: min(640px, 100%);
+      text-align: right;
+      padding-right: 0.2rem;
+    }
+    #face-count-row span { color: #a78bfa; font-weight: 700; }
 
     /* ── face cards ── */
     #face-cards {
@@ -151,10 +161,10 @@
       background: #141414;
       border: 1px solid #222;
       border-radius: 10px;
-      padding: 0.65rem 1rem;
+      padding: 0.65rem 0.9rem;
       flex: 1 1 140px;
       min-width: 120px;
-      transition: border-color 0.3s;
+      transition: border-color 0.4s;
     }
 
     .fc-id {
@@ -166,22 +176,53 @@
     }
 
     .fc-emotion {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 700;
       color: #fff;
       text-transform: capitalize;
+      margin-bottom: 0.25rem;
     }
 
-    .fc-happy {
-      font-size: 0.78rem;
-      color: #a78bfa;
-      margin-top: 0.15rem;
+    .fc-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin-top: 0.3rem;
+    }
+
+    .fc-stat-row {
+      display: grid;
+      grid-template-columns: 1.1rem 1fr 34px;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .fc-stat-icon { font-size: 0.75rem; text-align: center; }
+
+    .fc-mini-track {
+      background: #1e1e1e;
+      border-radius: 99px;
+      height: 5px;
+      overflow: hidden;
+    }
+
+    .fc-mini-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.25s ease, background 0.4s ease;
+    }
+
+    .fc-stat-pct {
+      font-size: 0.7rem;
+      color: #666;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
     }
 
     .fc-new {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       color: #4ade80;
-      margin-top: 0.2rem;
+      margin-top: 0.3rem;
     }
 
     #no-face {
@@ -196,7 +237,7 @@
   <h1>Emotion <span>Detector</span></h1>
   <div style="display:flex;align-items:center;gap:0.7rem">
     <span id="known-count">Known: <b id="known-num">0</b></span>
-    <button id="btn-reset" title="Forget all stored faces">Reset</button>
+    <button id="btn-reset">Reset</button>
   </div>
 </header>
 
@@ -210,51 +251,59 @@
 
 <p id="no-face"></p>
 
-<div id="happiness-section">
-  <div id="happiness-header">
-    <span id="happiness-title">😊 Group Happiness</span>
-    <span id="face-count">Faces: <span id="face-num">0</span></span>
+<div id="metrics">
+  <div class="metric-panel">
+    <div class="metric-label">😊 Group Happiness</div>
+    <div class="metric-value" id="happiness-value">—</div>
+    <div class="metric-bar-track">
+      <div class="metric-bar-fill" id="happiness-bar-fill"></div>
+    </div>
   </div>
-  <div id="happiness-value">—</div>
-  <div id="happiness-bar-track">
-    <div id="happiness-bar-fill"></div>
+  <div class="metric-panel">
+    <div class="metric-label">🎯 Group Attention</div>
+    <div class="metric-value" id="attention-value">—</div>
+    <div class="metric-bar-track">
+      <div class="metric-bar-fill" id="attention-bar-fill"></div>
+    </div>
   </div>
 </div>
+
+<div id="face-count-row">Faces detected: <span id="face-num">0</span></div>
 
 <div id="face-cards"></div>
 
 <script>
-// ── Config ──────────────────────────────────────────────
+// ── Config ───────────────────────────────────────────────
 const MODEL_URL       = 'https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@master/weights';
-const INTERVAL        = 200;   // ms between detections
-const MATCH_THRESHOLD = 0.50;  // euclidean distance threshold
-const MAX_DESCRIPTORS = 10;    // stored samples per person
+const INTERVAL        = 200;
+const MATCH_THRESHOLD = 0.50;
+const MAX_DESCRIPTORS = 10;
 const STORAGE_KEY     = 'emo-detector-faces-v1';
 
 const COLORS = ['#7c6af7','#f472b6','#34d399','#fb923c','#60a5fa','#f87171','#a3e635','#facc15'];
 const EMOJI  = { happy:'😊', sad:'😢', angry:'😠', fearful:'😨', disgusted:'🤢', surprised:'😲', neutral:'😐' };
 
 // ── DOM ──────────────────────────────────────────────────
-const statusEl   = document.getElementById('status');
-const video      = document.getElementById('video');
-const overlay    = document.getElementById('overlay');
-const ctx        = overlay.getContext('2d');
-const btnFlip    = document.getElementById('btn-flip');
-const btnReset   = document.getElementById('btn-reset');
-const noFaceEl   = document.getElementById('no-face');
-const faceNumEl  = document.getElementById('face-num');
-const knownNumEl = document.getElementById('known-num');
-const happyVal   = document.getElementById('happiness-value');
-const happyBar   = document.getElementById('happiness-bar-fill');
-const faceCards  = document.getElementById('face-cards');
+const statusEl    = document.getElementById('status');
+const video       = document.getElementById('video');
+const overlay     = document.getElementById('overlay');
+const ctx         = overlay.getContext('2d');
+const btnFlip     = document.getElementById('btn-flip');
+const btnReset    = document.getElementById('btn-reset');
+const noFaceEl    = document.getElementById('no-face');
+const faceNumEl   = document.getElementById('face-num');
+const knownNumEl  = document.getElementById('known-num');
+const happyVal    = document.getElementById('happiness-value');
+const happyBar    = document.getElementById('happiness-bar-fill');
+const attentionVal = document.getElementById('attention-value');
+const attentionBar = document.getElementById('attention-bar-fill');
+const faceCards   = document.getElementById('face-cards');
 
 // ── State ────────────────────────────────────────────────
 let currentStream = null;
 let facingMode    = 'user';
-
-// knownFaces: [{id: number, descriptors: Float32Array[]}]
-let knownFaces = [];
-let nextId     = 1;
+let knownFaces    = [];
+let nextId        = 1;
 
 // ── Persistence ──────────────────────────────────────────
 function loadStorage() {
@@ -266,59 +315,82 @@ function loadStorage() {
       id: f.id,
       descriptors: f.descriptors.map(d => new Float32Array(d))
     }));
-    if (knownFaces.length) {
-      nextId = Math.max(...knownFaces.map(f => f.id)) + 1;
-    }
-  } catch (_) {
-    knownFaces = []; nextId = 1;
-  }
+    if (knownFaces.length) nextId = Math.max(...knownFaces.map(f => f.id)) + 1;
+  } catch (_) { knownFaces = []; nextId = 1; }
   updateKnownCount();
 }
 
 function saveStorage() {
   try {
-    const data = knownFaces.map(f => ({
-      id: f.id,
-      descriptors: f.descriptors.map(d => Array.from(d))
-    }));
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(
+      knownFaces.map(f => ({ id: f.id, descriptors: f.descriptors.map(d => Array.from(d)) }))
+    ));
   } catch (_) {}
   updateKnownCount();
 }
 
-function updateKnownCount() {
-  knownNumEl.textContent = knownFaces.length;
-}
+function updateKnownCount() { knownNumEl.textContent = knownFaces.length; }
 
 // ── Face matching ─────────────────────────────────────────
 function bestMatch(descriptor) {
-  let bestId   = null;
-  let bestDist = Infinity;
+  let bestId = null, bestDist = Infinity;
   for (const face of knownFaces) {
     for (const stored of face.descriptors) {
       const dist = faceapi.euclideanDistance(descriptor, stored);
       if (dist < bestDist) { bestDist = dist; bestId = face.id; }
     }
   }
-  return bestDist < MATCH_THRESHOLD ? { id: bestId, dist: bestDist } : null;
+  return bestDist < MATCH_THRESHOLD ? { id: bestId } : null;
 }
 
-// returns { id, isNew }
 function assignId(descriptor) {
   const match = bestMatch(descriptor);
   if (match) {
-    // update stored descriptors with this new sample
     const face = knownFaces.find(f => f.id === match.id);
     face.descriptors.push(descriptor);
     if (face.descriptors.length > MAX_DESCRIPTORS) face.descriptors.shift();
     saveStorage();
     return { id: match.id, isNew: false };
-  } else {
-    const id = nextId++;
-    knownFaces.push({ id, descriptors: [descriptor] });
-    saveStorage();
-    return { id, isNew: true };
   }
+  const id = nextId++;
+  knownFaces.push({ id, descriptors: [descriptor] });
+  saveStorage();
+  return { id, isNew: true };
+}
+
+// ── Attention from landmarks ──────────────────────────────
+// Uses 68-point landmark geometry to estimate head orientation.
+// Horizontal: nose tip offset from jaw midpoint → yaw (looking left/right)
+// Vertical:   nose tip position in eye-to-chin span → pitch (looking up/down)
+function computeAttention(landmarks) {
+  const p = landmarks.positions;
+
+  // Jaw endpoints: 0 (left) → 16 (right)
+  const faceW = p[16].x - p[0].x;
+  if (faceW < 10) return 0.5;
+
+  // Yaw: how far nose tip deviates from face horizontal center
+  const centerX  = (p[0].x + p[16].x) / 2;
+  const yawRatio = Math.abs(p[30].x - centerX) / (faceW / 2); // 0=straight, >1=sideways
+
+  // Pitch: nose tip Y position within eye-to-chin vertical span
+  const eyeY    = (p[36].y + p[45].y) / 2; // avg of outer eye corners
+  const chinY   = p[8].y;
+  const faceH   = chinY - eyeY;
+  const noseRelY = faceH > 10 ? (p[30].y - eyeY) / faceH : 0.5;
+  // Looking straight ≈ 0.5; deviation → distracted
+  const pitchRatio = Math.abs(noseRelY - 0.5) / 0.45;
+
+  // Take the worse of the two axes, apply a sensitivity factor
+  const distraction = Math.min(1, Math.max(yawRatio, pitchRatio) * 1.3);
+  return Math.max(0, 1 - distraction);
+}
+
+function attentionColor(score) {
+  // 0 = red, 0.5 = yellow, 1 = green
+  if (score > 0.65) return '#4ade80';
+  if (score > 0.35) return '#facc15';
+  return '#f87171';
 }
 
 // ── Camera ───────────────────────────────────────────────
@@ -343,11 +415,10 @@ async function startCamera() {
     });
     video.srcObject = currentStream;
     await new Promise(res => video.onloadedmetadata = res);
-    applyMirror();
-    syncOverlay();
+    applyMirror(); syncOverlay();
     setStatus('Running — point camera at faces', 'ok');
   } catch (err) {
-    if (err.name === 'NotAllowedError') setStatus('Camera access denied. Please allow and reload.', 'error');
+    if (err.name === 'NotAllowedError') setStatus('Camera access denied.', 'error');
     else if (err.name === 'NotFoundError') setStatus('No camera found.', 'error');
     else setStatus(`Camera error: ${err.message}`, 'error');
   }
@@ -377,43 +448,72 @@ function drawBoxes(results) {
   const sx = overlay.width  / (video.videoWidth  || overlay.width);
   const sy = overlay.height / (video.videoHeight || overlay.height);
 
-  results.forEach(({ detection, personId }) => {
+  results.forEach(({ detection, personId, attention }) => {
     const { x, y, width, height } = detection.box;
-    const color = colorFor(personId);
-    ctx.strokeStyle = color;
+    const idColor  = colorFor(personId);
+    const attColor = attentionColor(attention);
+
+    // main box in person color
+    ctx.strokeStyle = idColor;
     ctx.lineWidth   = 2.5;
-    ctx.shadowColor = color;
-    ctx.shadowBlur  = 10;
+    ctx.shadowColor = idColor;
+    ctx.shadowBlur  = 8;
     ctx.strokeRect(x * sx, y * sy, width * sx, height * sy);
     ctx.shadowBlur  = 0;
-    ctx.fillStyle   = color;
-    ctx.font        = 'bold 13px Segoe UI, sans-serif';
-    ctx.fillText(`P${personId}`, x * sx + 4, y * sy - 6);
+
+    // person label
+    ctx.fillStyle = idColor;
+    ctx.font      = 'bold 13px Segoe UI, sans-serif';
+    ctx.fillText(`P${personId}`, x * sx + 4, y * sy - 16);
+
+    // attention indicator dot
+    const dotX = (x + width) * sx - 10;
+    const dotY = y * sy - 10;
+    ctx.beginPath();
+    ctx.arc(dotX, dotY, 6, 0, Math.PI * 2);
+    ctx.fillStyle   = attColor;
+    ctx.shadowColor = attColor;
+    ctx.shadowBlur  = 6;
+    ctx.fill();
+    ctx.shadowBlur  = 0;
   });
 }
 
+// ── UI update ─────────────────────────────────────────────
 function updateUI(results) {
   faceNumEl.textContent = results.length;
 
   if (results.length === 0) {
-    happyVal.textContent = '—';
-    happyBar.style.width = '0%';
-    faceCards.innerHTML  = '';
-    noFaceEl.textContent = 'No face detected';
+    happyVal.textContent     = '—';
+    attentionVal.textContent = '—';
+    happyBar.style.width     = '0%';
+    attentionBar.style.width = '0%';
+    faceCards.innerHTML      = '';
+    noFaceEl.textContent     = 'No face detected';
     return;
   }
   noFaceEl.textContent = '';
 
-  const avgHappy = results.reduce((s, r) => s + (r.expressions.happy || 0), 0) / results.length;
-  const pct = Math.round(avgHappy * 100);
-  happyVal.textContent = pct + '%';
-  happyBar.style.width = pct + '%';
+  const n = results.length;
+  const avgHappy     = results.reduce((s, r) => s + (r.expressions.happy || 0), 0) / n;
+  const avgAttention = results.reduce((s, r) => s + r.attention, 0) / n;
+
+  const hp = Math.round(avgHappy     * 100);
+  const ap = Math.round(avgAttention * 100);
+
+  happyVal.textContent     = hp + '%';
+  happyBar.style.width     = hp + '%';
+  attentionVal.textContent = ap + '%';
+  attentionBar.style.width = ap + '%';
+  attentionVal.style.color = attentionColor(avgAttention);
 
   faceCards.innerHTML = '';
-  results.forEach(({ personId, isNew, expressions }) => {
-    const dom   = dominant(expressions);
-    const happy = Math.round((expressions.happy || 0) * 100);
-    const color = colorFor(personId);
+  results.forEach(({ personId, isNew, expressions, attention }) => {
+    const dom    = dominant(expressions);
+    const happy  = Math.round((expressions.happy || 0) * 100);
+    const attPct = Math.round(attention * 100);
+    const color  = colorFor(personId);
+    const aColor = attentionColor(attention);
 
     const card = document.createElement('div');
     card.className = 'face-card';
@@ -421,7 +521,22 @@ function updateUI(results) {
     card.innerHTML = `
       <div class="fc-id" style="color:${color}">Person ${personId}</div>
       <div class="fc-emotion">${EMOJI[dom]} ${dom}</div>
-      <div class="fc-happy">😊 ${happy}%</div>
+      <div class="fc-stats">
+        <div class="fc-stat-row">
+          <span class="fc-stat-icon">😊</span>
+          <div class="fc-mini-track">
+            <div class="fc-mini-fill" style="width:${happy}%;background:#a78bfa"></div>
+          </div>
+          <span class="fc-stat-pct">${happy}%</span>
+        </div>
+        <div class="fc-stat-row">
+          <span class="fc-stat-icon">🎯</span>
+          <div class="fc-mini-track">
+            <div class="fc-mini-fill" style="width:${attPct}%;background:${aColor}"></div>
+          </div>
+          <span class="fc-stat-pct" style="color:${aColor}">${attPct}%</span>
+        </div>
+      </div>
       ${isNew ? '<div class="fc-new">✦ New face saved</div>' : ''}`;
     faceCards.appendChild(card);
   });
@@ -433,13 +548,19 @@ async function detectLoop() {
   try {
     const detections = await faceapi
       .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 }))
-      .withFaceLandmarks(true)   // tiny landmark model
+      .withFaceLandmarks(true)
       .withFaceExpressions()
       .withFaceDescriptors();
 
     const results = detections.map(d => {
       const { id, isNew } = assignId(d.descriptor);
-      return { detection: d.detection, expressions: d.expressions, personId: id, isNew };
+      return {
+        detection:   d.detection,
+        expressions: d.expressions,
+        personId:    id,
+        isNew,
+        attention:   computeAttention(d.landmarks)
+      };
     });
 
     drawBoxes(results);
@@ -455,11 +576,9 @@ async function init() {
     setStatus('getUserMedia not supported. Use HTTPS.', 'error');
     return;
   }
-
   loadStorage();
-
   try {
-    setStatus('Loading models (first load may take ~10s)…');
+    setStatus('Loading models (first load ~10s)…');
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
       faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL),
