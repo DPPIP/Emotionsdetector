@@ -411,7 +411,7 @@ async function startCamera() {
   if (currentStream) currentStream.getTracks().forEach(t => t.stop());
   try {
     currentStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode, width: { ideal: 1280 }, height: { ideal: 960 } }
+      video: { facingMode, width: { ideal: 1920 }, height: { ideal: 1080 } }
     });
     video.srcObject = currentStream;
     await new Promise(res => video.onloadedmetadata = res);
@@ -547,7 +547,7 @@ async function detectLoop() {
   syncOverlay();
   try {
     const detections = await faceapi
-      .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 }))
+      .detectAllFaces(video, new faceapi.SsdMobilenetv1Options({ minConfidence: 0.15, maxResults: 20 }))
       .withFaceLandmarks(true)
       .withFaceExpressions()
       .withFaceDescriptors();
@@ -580,7 +580,7 @@ async function init() {
   try {
     setStatus('Loading models (first load ~10s)…');
     await Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+      faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
       faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL),
       faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
       faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
